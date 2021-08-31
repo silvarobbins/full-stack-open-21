@@ -19,11 +19,11 @@ function App() {
   const handleFilterChange = (event) => {
     setNewFilter(event.target.value)
   }
-    
+  
   return (
     <div>
         <Filter filter={filter} handleFilterChange={handleFilterChange}/>
-        <Countries filter={filter} countries={countries}/>
+        <Countries filter={filter} countries={countries} setNewFilter={setNewFilter}/>
     </div>
   );
 }
