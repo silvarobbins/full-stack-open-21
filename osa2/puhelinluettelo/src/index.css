@@ -1,7 +1,19 @@
-import ReactDOM from 'react-dom'
-import App from './App'
+.notification {
+  color: green;
+  background: lightgrey;
+  font-size: 20px;
+  border-style: solid;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
 
-ReactDOM.render(
-  <App />, 
-  document.getElementById('root')
-)
+.error {
+  color: red;
+  background: lightgrey;
+  font-size: 20px;
+  border-style: solid;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
