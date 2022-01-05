@@ -1,10 +1,10 @@
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InNpbHZhcm9iIiwiaWQiOiI2MWQzNmE4NDhhMTY1YTY4Mzc3OGYxYmQiLCJpYXQiOjE2NDEzMjI3NDZ9.uhx-pYtrLSMyOj59KLVp9LdPXMC1fNAifhHh6BToxTo
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InNpbHZ1bGkiLCJpZCI6IjYxZDVkNDBhMzY3NmVlMzcxNmQ5MzFlNyIsImlhdCI6MTY0MTQwMzQyOX0.xkIu--myZRIeSFLNVGZQYb-IOhHzxayyzRZUEEJyns8
 
 {
-    "title": "funblog",
-    "author": "funwriter",
+    "title": "fun blog",
+    "author": "fun author",
     "url": "fun.com",
-    "likes": 7
+    "likes": 10
 }
