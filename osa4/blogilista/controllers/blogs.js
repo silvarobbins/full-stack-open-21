@@ -31,7 +31,6 @@ blogRouter.delete('/:id', middleware.tokenExtractor, middleware.userExtractor, a
     const blog = await Blog.findById(request.params.id)
     const user = request.user
     const userid = user._id.toString()
-    console.log(userid)
 
     if ( blog.user.toString() === userid ) {
       await Blog.findByIdAndRemove(request.params.id)
@@ -44,19 +43,26 @@ blogRouter.delete('/:id', middleware.tokenExtractor, middleware.userExtractor, a
 
 })
 
-blogRouter.put('/:id', async (request, response) => {
+blogRouter.put('/:id', middleware.tokenExtractor, middleware.userExtractor, async (request, response) => {
+  const blog = await Blog.findById(request.params.id)
   const body = request.body
+  const user = request.user
+  const userid = user._id.toString()
 
-  const blog = {
+  const editedBlog = {
     title: body.title,
     author: body.author,
     url: body.url,
     likes: body.likes || 0
   }
 
+  if ( blog.user.toString() === userid ) {
+    const res = await Blog.findByIdAndUpdate(request.params.id, editedBlog, { new: true })
+    response.status(201).json(res.toJSON())
+  } else {
+    return response.status(401).json({error: 'user not authorized to edit blog'})
+  }
 
-  const res = await Blog.findByIdAndUpdate(request.params.id, blog, { new: true })
-  response.status(201).json(res.toJSON())
 })
 
 module.exports = blogRouter

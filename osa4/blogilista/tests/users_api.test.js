@@ -53,8 +53,6 @@ test('password length of under 3 will not be created', async () => {
   .expect(400)
   .expect('Content-Type', /application\/json/)
 
-  console.log(result.body.error)
-
   expect(result.body.error).toContain('shorter than the minimum allowed length (3)')
   
   const usersAtEnd = await helper.usersInDb()
