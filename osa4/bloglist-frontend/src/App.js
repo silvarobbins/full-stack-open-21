@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
 import Error from './components/Error'
 import Notification from './components/Notification'
@@ -14,6 +14,8 @@ const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
+
+  const newBlogFormRef = useRef()
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
@@ -62,6 +64,7 @@ const App = () => {
 
   const addBlog = async (blogObject) => {
     try {
+      newBlogFormRef.current.toggleVisibility()
       await blogService
         .create(blogObject)
         .then(returnedBlog =>{
@@ -109,7 +112,7 @@ const App = () => {
   const blogList = (user) => (
     <div>
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
+        <Blog key={blog.id} blog={blog} user={blog.user}/>
       )}
     </div>
   )
@@ -132,7 +135,7 @@ const App = () => {
       {user.name} is logged in &emsp;
       <button type = "button" onClick = {handleLogout} >logout</button>
     </p>
-    <Togglable buttonLabel = "create new blog">
+    <Togglable buttonLabel = "create new blog" ref = {newBlogFormRef}>
         <NewBlogForm createBlog = {addBlog} />
       </Togglable>
     <h2>Blogs</h2>

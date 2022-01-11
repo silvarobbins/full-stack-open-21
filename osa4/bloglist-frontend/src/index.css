@@ -17,3 +17,10 @@
     padding: 10px;
     margin-bottom: 10px;
 }
+
+.clickableText {
+  background:none;
+  border:none;
+  cursor: pointer;
+  font-weight: bold;
+}
