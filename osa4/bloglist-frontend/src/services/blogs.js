@@ -4,7 +4,6 @@ let token = null
 
 const setToken = newToken => {
   token = `bearer ${newToken}`
-  console.log(token)
 }
 
 const getAll = () => {
@@ -19,6 +18,7 @@ const create = async newObject => {
   }
 
   const response = await axios.post(baseUrl, newObject, config)
+  console.log(response)
   return response.data
 }
 
