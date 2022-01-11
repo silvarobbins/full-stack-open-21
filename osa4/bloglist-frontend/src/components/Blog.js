@@ -8,10 +8,12 @@ const Blog = ({blog, user}) => {
   const showWhenVisible = { display: visible ? '' : 'none' }
   
   const blogStyle = {
+    
     paddingTop: 10,
     paddingLeft: 2,
     borderWidth: 1,
-    marginBottom: 5
+    marginBottom: 5,
+    'text-align': 'left'
   }
   
   const toggleVisibility = () => {
@@ -24,8 +26,7 @@ const Blog = ({blog, user}) => {
       <button className='clickableText' onClick={toggleVisibility}>{blog.title}</button>, {blog.author}
     </div>  
     <div style = {showWhenVisible}>
-      {blog.title}, {blog.author}
-      <button onClick={toggleVisibility}>hide</button> <br/>
+      <button className='clickableText' onClick={toggleVisibility}>{blog.title}</button>, {blog.author}<br/>
       {blog.url}<br/>
       {blog.likes} &emsp;
       <button>like</button> <br/>
