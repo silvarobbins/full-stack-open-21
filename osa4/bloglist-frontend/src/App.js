@@ -5,18 +5,15 @@ import Notification from './components/Notification'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import NewBlogForm from './components/NewBlogForm'
+import Togglable from './components/Togglable'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [errorMessage, setErrorMessage] = useState(null)
   const [notificationMessage, setNotificationMessage] = useState(null)
-  const [newBlogFormVisible, setNewBlogFormVisible] = useState(false)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-  const [newTitle, setNewTitle] = useState('')
-  const [newAuthor, setNewAuthor] = useState('')
-  const [newUrl, setNewUrl] = useState('')
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
@@ -63,28 +60,23 @@ const App = () => {
     setUser(null)
   }
 
-  const addBlog = event => {
-    event.preventDefault()
-    const blogObject = {
-      title: newTitle,
-      author: newAuthor,
-      url: newUrl,
-      likes: 0
+  const addBlog = async (blogObject) => {
+    try {
+      await blogService
+        .create(blogObject)
+        .then(returnedBlog =>{
+          setBlogs(blogs.concat(returnedBlog))
+        })
+      setNotificationMessage(`added ${blogObject.title}`)
+      setTimeout(() => {
+        setNotificationMessage(null)
+      }, 5000)
+    } catch (exception) {
+      setErrorMessage("couldn't add blog")
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
     }
-
-    blogService
-      .create(blogObject)
-      .then(returnedBlog =>{
-        setBlogs(blogs.concat(returnedBlog))
-        setNewTitle('')
-        setNewAuthor('')
-        setNewUrl('')
-      })
-    setNotificationMessage(`added ${blogObject.title}`)
-    setNewBlogFormVisible(false)
-    setTimeout(() => {
-      setNotificationMessage(null)
-    }, 5000)
   } 
 
   const loginForm = () => (
@@ -113,32 +105,7 @@ const App = () => {
     </form>
     </div>
   )
-
-  const newBlogForm = () => {
-    const hideWhenVisible =  {display: newBlogFormVisible ? 'none': ''}
-    const showWhenVisible = {display: newBlogFormVisible ? '' : 'none'}
-
-    return (
-      <div>
-      <div style={hideWhenVisible}>
-        <button onClick={() => setNewBlogFormVisible(true)}>create new form</button>
-      </div>
-        <div style={showWhenVisible}>
-        <NewBlogForm
-          addBlog = {addBlog}
-          handleNewTitle = {({ target }) => setNewTitle(target.value)}
-          handleNewAuthor = {({ target }) => setNewAuthor(target.value)}
-          handleNewUrl = {({ target }) => setNewUrl(target.value)}
-          newTitle = {newTitle}
-          newAuthor = {newAuthor}
-          newUrl = {newUrl}
-        />
-        <button onClick={() => setNewBlogFormVisible(false)}>cancel</button>
-      </div>
-      </div>
-    )
-  }
-
+  
   const blogList = (user) => (
     <div>
       {blogs.map(blog =>
@@ -165,7 +132,9 @@ const App = () => {
       {user.name} is logged in &emsp;
       <button type = "button" onClick = {handleLogout} >logout</button>
     </p>
-    {newBlogForm()}
+    <Togglable buttonLabel = "create new blog">
+        <NewBlogForm createBlog = {addBlog} />
+      </Togglable>
     <h2>Blogs</h2>
     {blogList(user)}
   </div>
