@@ -75,6 +75,7 @@ const App = () => {
         setNotificationMessage(null)
       }, 5000)
     } catch (exception) {
+      console.log(exception)
       setErrorMessage("couldn't add blog")
       setTimeout(() => {
         setErrorMessage(null)
@@ -98,6 +99,26 @@ const App = () => {
         setErrorMessage(null)
       }, 5000)
     }
+  }
+
+  const deleteBlog = (blogObject) => {
+    try {
+      blogService
+        .del(blogObject)
+      blogs.splice(blogs.indexOf(blogObject),1)
+      setBlogs(blogs)
+      setNotificationMessage(`deleted ${blogObject.title}`)
+      setTimeout(() => {
+        setNotificationMessage(null)
+      }, 5000)
+    } catch (exception) {
+      console.log(exception)
+      setErrorMessage("couldn't delete blog")
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+    }
+
   }
 
   const loginForm = () => (
@@ -129,11 +150,10 @@ const App = () => {
   
   const blogList = () => {
     blogs.sort((a,b) => b.likes-a.likes)
-    console.log(blogs)
     return(
       <div>
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} user={blog.user} likeBlog={likeBlog}/>
+        <Blog key={blog.id} blog={blog} loggedUser={user} likeBlog={likeBlog} deleteBlog={deleteBlog}/>
       )}
       </div>
     )
@@ -162,7 +182,7 @@ const App = () => {
         <NewBlogForm createBlog = {addBlog} />
       </Togglable>
     <h2>Blogs</h2>
-    {blogList(user)}
+    {blogList()}
   </div>
   )
   }

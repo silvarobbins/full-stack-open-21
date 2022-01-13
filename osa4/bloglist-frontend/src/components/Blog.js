@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import '../index.css'
 
-const Blog = ({blog, user, likeBlog}) => {
+const Blog = ({blog, loggedUser, likeBlog, deleteBlog}) => {
   const [visible, setVisible] = useState(false)
 
   const hideWhenVisible = { display: visible ? 'none' : '' }
@@ -24,7 +24,32 @@ const Blog = ({blog, user, likeBlog}) => {
     likeBlog(blog)
   }
 
-  return (
+  const del = (event) => {
+    event.preventDefault()
+    if (window.confirm(`Remove blog ${blog.name} by ${blog.author}`)) {
+    deleteBlog(blog)
+    }
+  }
+
+  if (blog.user.username === loggedUser.username) {
+    return (
+    <div style = {blogStyle}>
+      <div style = {hideWhenVisible}>
+        <button className='clickableText' onClick={toggleVisibility}>{blog.title}</button>, {blog.author}
+      </div>  
+      <div style = {showWhenVisible}>
+        <button className='clickableText' onClick={toggleVisibility}>{blog.title}</button>, {blog.author}<br/>
+        {blog.url}<br/>
+        {blog.likes} &emsp;
+        <button onClick={like}>like</button> <br/>
+        {blog.user.name} &emsp;
+        <button onClick={del}>delete</button> <br/>
+      </div>  
+    </div>
+    )
+  }
+
+return (
   <div style = {blogStyle}>
     <div style = {hideWhenVisible}>
       <button className='clickableText' onClick={toggleVisibility}>{blog.title}</button>, {blog.author}
@@ -34,10 +59,11 @@ const Blog = ({blog, user, likeBlog}) => {
       {blog.url}<br/>
       {blog.likes} &emsp;
       <button onClick={like}>like</button> <br/>
-      {user.name}
+      {blog.user.name}
     </div>  
   </div>
   )
+
 }
 
 export default Blog
