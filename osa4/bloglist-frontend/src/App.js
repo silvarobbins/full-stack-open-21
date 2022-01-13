@@ -62,10 +62,10 @@ const App = () => {
     setUser(null)
   }
 
-  const addBlog = async (blogObject) => {
+  const addBlog = (blogObject) => {
     try {
       newBlogFormRef.current.toggleVisibility()
-      await blogService
+      blogService
         .create(blogObject)
         .then(returnedBlog =>{
           setBlogs(blogs.concat(returnedBlog))
@@ -81,6 +81,24 @@ const App = () => {
       }, 5000)
     }
   } 
+  
+  const likeBlog = (blogObject) => {
+    try {
+      blogService
+        .like(blogObject)
+      blogs[blogs.indexOf(blogObject)].likes += 1
+      setNotificationMessage(`liked ${blogObject.title}`)
+      setTimeout(() => {
+        setNotificationMessage(null)
+      }, 5000)
+    } catch (exception) {
+      console.log(exception)
+      setErrorMessage("couldn't like blog")
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+    }
+  }
 
   const loginForm = () => (
     <div>
@@ -112,7 +130,7 @@ const App = () => {
   const blogList = (user) => (
     <div>
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} user={blog.user}/>
+        <Blog key={blog.id} blog={blog} user={blog.user} likeBlog={likeBlog}/>
       )}
     </div>
   )

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import '../index.css'
 
-const Blog = ({blog, user}) => {
+const Blog = ({blog, user, likeBlog}) => {
   const [visible, setVisible] = useState(false)
 
   const hideWhenVisible = { display: visible ? 'none' : '' }
@@ -12,12 +12,16 @@ const Blog = ({blog, user}) => {
     paddingTop: 10,
     paddingLeft: 2,
     borderWidth: 1,
-    marginBottom: 5,
-    'text-align': 'left'
+    marginBottom: 5
   }
   
   const toggleVisibility = () => {
     setVisible(!visible)
+  }
+
+  const like = (event) => {
+    event.preventDefault()
+    likeBlog(blog)
   }
 
   return (
@@ -29,7 +33,7 @@ const Blog = ({blog, user}) => {
       <button className='clickableText' onClick={toggleVisibility}>{blog.title}</button>, {blog.author}<br/>
       {blog.url}<br/>
       {blog.likes} &emsp;
-      <button>like</button> <br/>
+      <button onClick={like}>like</button> <br/>
       {user.name}
     </div>  
   </div>

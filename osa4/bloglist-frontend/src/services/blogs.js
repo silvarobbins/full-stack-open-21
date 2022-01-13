@@ -12,12 +12,27 @@ const getAll = () => {
 }
 
 const create = async newObject => {
-  console.log(token)
   const config = {
     headers: { Authorization: token }
   }
 
   const response = await axios.post(baseUrl, newObject, config)
+  return response.data
+}
+
+const like = async blog => {
+  const config = {
+    headers: { Authorization: token }
+  }
+  const updatedObject = {
+      title: blog.title,
+      author: blog.author,
+      url: blog.url,
+      likes: blog.likes + 1,
+      user: blog.user.id
+  }
+
+  const response = await axios.put(baseUrl + `/${blog.id}`, updatedObject, config)
   console.log(response)
   return response.data
 }
@@ -25,7 +40,8 @@ const create = async newObject => {
 const exportObject = {
   setToken, 
   getAll,
-  create
+  create,
+  like
 }
 
 export default exportObject
