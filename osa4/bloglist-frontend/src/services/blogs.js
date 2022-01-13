@@ -25,11 +25,11 @@ const like = async blog => {
     headers: { Authorization: token }
   }
   const updatedObject = {
-      title: blog.title,
-      author: blog.author,
-      url: blog.url,
-      likes: blog.likes + 1,
-      user: blog.user.id
+    title: blog.title,
+    author: blog.author,
+    url: blog.url,
+    likes: blog.likes + 1,
+    user: blog.user.id
   }
 
   const response = await axios.put(baseUrl + `/${blog.id}`, updatedObject, config)
@@ -48,7 +48,7 @@ const del = async blog => {
 }
 
 const exportObject = {
-  setToken, 
+  setToken,
   getAll,
   create,
   like,
