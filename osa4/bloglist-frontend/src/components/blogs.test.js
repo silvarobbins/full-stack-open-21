@@ -1,9 +1,9 @@
 import React from 'react'
 import '@testing-library/jest-dom/extend-expect'
-import { render } from '@testing-library/react'
+import { render, fireEvent } from '@testing-library/react'
 import Blog from './Blog'
 
-describe('Blog', () => {
+describe('<Blog />', () => {
   let component
 
   const blog = {
@@ -30,11 +30,32 @@ describe('Blog', () => {
   test('by default, renders title and author but not url or likes', () => {
     expect(component.container).toHaveTextContent(blog.title)
     expect(component.container).toHaveTextContent(blog.author)
-    expect(component.container).not.toHaveStyle('display:none')
+    expect(component.container).not.toHaveTextContent(blog.url)
+    expect(component.container).not.toHaveTextContent(blog.likes)
     component.debug()
 
   })
 
-  test
+  test('url and likes are shown when blog is expanded', async () => {
+    const button = component.getByText(blog.title)
+    fireEvent.click(button)
+    const likeButton = component.getByText('like')
+    component.debug()
+
+    expect(component.container).toHaveTextContent(blog.url)
+    expect(component.container).toHaveTextContent(blog.likes)
+    expect(likeButton).toBeDefined()
+  })
+
+  test('pressin like button twice calls like function twice', async () => {
+    const button = component.getByText(blog.title)
+    fireEvent.click(button)
+
+    const likeButton = component.getByText('like')
+    fireEvent.click(likeButton)
+    fireEvent.click(likeButton)
+
+    expect(mockLike.mock.calls).toHaveLength(2)
+  })
 
 })

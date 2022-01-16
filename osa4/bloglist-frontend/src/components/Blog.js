@@ -1,11 +1,37 @@
 import React, { useState } from 'react'
 import '../index.css'
 
+const BlogDetails = ({ blog, loggedUser, likeBlog, deleteBlog }) => {
+  const isUser = loggedUser.username === blog.user?.username
+
+  const del = (event) => {
+    event.preventDefault()
+    if (window.confirm(`Remove blog ${blog.name} by ${blog.author}`)) {
+      deleteBlog(blog)
+    }
+  }
+
+  const like = (event) => {
+    event.preventDefault()
+    likeBlog(blog)
+  }
+
+  return (
+    <div className='blog-details'>
+      <p>{blog.url}</p>
+      <p className='likes'>
+        {blog.likes} &emsp; {blog.likes === 1 ? 'like' : 'likes'}
+        <button onClick={like}>like</button>
+      </p>
+      <p>{blog.user?.name}</p>
+      {isUser && <button onClick={del}> delete</button>}
+    </div>
+  )
+}
+
 const Blog = ({ blog, loggedUser, likeBlog, deleteBlog }) => {
   const [visible, setVisible] = useState(false)
 
-  const hideWhenVisible = { display: visible ? 'none' : '' }
-  const showWhenVisible = { display: visible ? '' : 'none' }
 
   const blogStyle = {
     paddingTop: 10,
@@ -18,47 +44,15 @@ const Blog = ({ blog, loggedUser, likeBlog, deleteBlog }) => {
     setVisible(!visible)
   }
 
-  const like = (event) => {
-    event.preventDefault()
-    likeBlog(blog)
-  }
-
-  const del = (event) => {
-    event.preventDefault()
-    if (window.confirm(`Remove blog ${blog.name} by ${blog.author}`)) {
-      deleteBlog(blog)
-    }
-  }
-
-  if (blog.user?.username === loggedUser.username) {
-    return (
-      <div style = {blogStyle}>
-        <div style = {hideWhenVisible}>
-          <button className='clickableText' onClick={toggleVisibility}>{blog.title}</button>, {blog.author}
-        </div>
-        <div style = {showWhenVisible}>
-          <button className='clickableText' onClick={toggleVisibility}>{blog.title}</button>, {blog.author}<br/>
-          {blog.url}<br/>
-          {blog.likes} &emsp;
-          <button onClick={like}>like</button> <br/>
-          {blog.user.name} &emsp;
-          <button onClick={del}>delete</button> <br/>
-        </div>
-      </div>
-    )
-  }
-
   return (
     <div style = {blogStyle}>
-      <div style = {hideWhenVisible}>
+      <div className='title'>
         <button className='clickableText' onClick={toggleVisibility}>{blog.title}</button>, {blog.author}
       </div>
-      <div style = {showWhenVisible}>
-        <button className='clickableText' onClick={toggleVisibility}>{blog.title}</button>, {blog.author}<br/>
-        {blog.url}<br/>
-        {blog.likes} &emsp;
-        <button onClick={like}>like</button> <br/>
-        {blog.user?.name}
+      <div>
+        {visible ? (
+          <BlogDetails blog={blog} loggedUser={loggedUser} likeBlog={likeBlog} deleteBlog={deleteBlog}/>
+        ) : null}
       </div>
     </div>
   )
