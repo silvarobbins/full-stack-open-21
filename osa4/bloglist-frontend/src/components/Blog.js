@@ -21,10 +21,10 @@ const BlogDetails = ({ blog, loggedUser, likeBlog, deleteBlog }) => {
       <p>{blog.url}</p>
       <p className='likes'>
         {blog.likes} &emsp; {blog.likes === 1 ? 'like' : 'likes'}
-        <button onClick={like}>like</button>
+        <button id='like-button' onClick={like}>like</button>
       </p>
       <p>{blog.user?.name}</p>
-      {isUser && <button onClick={del}> delete</button>}
+      {isUser && <button id='delete-button' onClick={del}> delete</button>}
     </div>
   )
 }
