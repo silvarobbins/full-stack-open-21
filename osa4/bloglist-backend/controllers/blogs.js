@@ -18,7 +18,7 @@ blogRouter.post('/', middleware.tokenExtractor, middleware.userExtractor, async(
       author: body.author,
       url: body.url,
       likes: body.likes || 0,
-      user: user._id
+      user: user
     })
 
     const savedBlog = await blog.save()
@@ -34,8 +34,6 @@ blogRouter.delete('/:id', middleware.tokenExtractor, middleware.userExtractor, a
 
     if ( blog.user.toString() === userid ) {
       await Blog.findByIdAndRemove(request.params.id)
-      user.blogs.splice(user.blogs.indexOf(blog._id), 1)
-      await user.save()
       response.status(204).end()
     } else {
       return response.status(401).json({error: 'user not authorized to delete blog'})

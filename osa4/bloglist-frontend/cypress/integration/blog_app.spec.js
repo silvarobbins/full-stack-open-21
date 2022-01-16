@@ -53,9 +53,9 @@ describe ('Blog app', function() {
 
       beforeEach( function () {
         cy.login({ username: 'atlutin', password: 'atlaonparas' })
-        cy.createBlog({ title: 'first blog', author: 'first author', url: 'firsturl.com' })
-        cy.createBlog({ title: 'second blog', author: 'second author', url: 'secondurl.com' })
-        cy.createBlog({ title: 'third blog', author: 'third author', url: 'thirdurl.com' })
+        cy.createBlog({ title: 'first blog', author: 'first author', url: 'firsturl.com', likes: 0 })
+        cy.createBlog({ title: 'second blog', author: 'second author', url: 'secondurl.com', likes: 2 })
+        cy.createBlog({ title: 'third blog', author: 'third author', url: 'thirdurl.com', likes: 3 })
       })
 
       it('a blog can be liked', function() {
@@ -67,36 +67,20 @@ describe ('Blog app', function() {
         cy.get('.notification').should('contain', 'liked first blog')
           .and('have.css', 'color', 'rgb(0, 128, 0)')
       })
+
+      it('deleting a blog works if logged user is user of blog', function() {
+        cy.contains('third blog').click()
+        cy.get('#delete-button').click()
+        cy.get('.blog').should('have.length', 2)
+      })
+
+      it('blogs sort by number of likes', function () {
+        cy.get('.blog').then( blogs => {
+          cy.expect(blogs[0].textContent).to.equal('third blog, third author')
+          cy.expect(blogs[1].textContent).to.equal('second blog, second author')
+          cy.expect(blogs[2].textContent).to.equal('first blog, first author')
+        })
+      })
     })
   })
-
-  describe('deleting a blog', function() {
-    beforeEach( function () {
-      cy.login({ username: 'atlutin', password: 'atlaonparas' })
-      cy.createBlog({ title: 'first blog', author: 'first author', url: 'firsturl.com' })
-      cy.createBlog({ title: 'second blog', author: 'second author', url: 'secondurl.com' })
-      cy.createBlog({ title: 'third blog', author: 'third author', url: 'thirdurl.com' })
-    })
-
-    it('works if logged user is a user of blog', function() {
-      cy.contains('third blog').click()
-      cy.get('#delete-button').click()
-      cy.get('.notification').should('contain', 'deleted third blog')
-        .and('have.css', 'color', 'rgb(0, 128, 0)')
-      cy.contains('third blog, third author').should('not.exist')
-    })
-
-    it('works if logged user is a user of blog', function() {
-      cy.get('#logout-button').click()
-      cy.login({ username: 'otherusername', password: 'secretpassword' })
-      cy.contains('second blog').click()
-
-      cy.contains('secondurl.com')
-      cy.get('#delete-button').should('not.exist')
-    })
-
-
-  })
-
-
 })

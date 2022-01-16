@@ -33,7 +33,6 @@ const like = async blog => {
   }
 
   const response = await axios.put(baseUrl + `/${blog.id}`, updatedObject, config)
-  console.log(response)
   return response.data
 }
 
@@ -43,7 +42,6 @@ const del = async blog => {
   }
 
   const response = await axios.delete(baseUrl + `/${blog.id}`, config)
-  console.log(response)
   return response.data
 }
 

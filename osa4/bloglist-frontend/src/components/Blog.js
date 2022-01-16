@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import '../index.css'
 
 const BlogDetails = ({ blog, loggedUser, likeBlog, deleteBlog }) => {
+
   const isUser = loggedUser.username === blog.user?.username
 
   const del = (event) => {
@@ -20,7 +21,7 @@ const BlogDetails = ({ blog, loggedUser, likeBlog, deleteBlog }) => {
     <div className='blog-details'>
       <p>{blog.url}</p>
       <p className='likes'>
-        {blog.likes} &emsp; {blog.likes === 1 ? 'like' : 'likes'}
+        {blog.likes} {blog.likes === 1 ? 'like' : 'likes'} &emsp;
         <button id='like-button' onClick={like}>like</button>
       </p>
       <p>{blog.user?.name}</p>
@@ -45,7 +46,7 @@ const Blog = ({ blog, loggedUser, likeBlog, deleteBlog }) => {
   }
 
   return (
-    <div style = {blogStyle}>
+    <div className='blog' style = {blogStyle}>
       <div className='title'>
         <button className='clickableText' onClick={toggleVisibility}>{blog.title}</button>, {blog.author}
       </div>

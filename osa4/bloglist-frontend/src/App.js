@@ -65,6 +65,7 @@ const App = () => {
       blogService
         .create(blogObject)
         .then(returnedBlog => {
+          console.log(blogs, returnedBlog)
           setBlogs(blogs.concat(returnedBlog))
         })
       setNotificationMessage(`added ${blogObject.title}`)
