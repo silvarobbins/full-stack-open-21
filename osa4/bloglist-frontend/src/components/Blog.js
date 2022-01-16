@@ -30,7 +30,7 @@ const Blog = ({ blog, loggedUser, likeBlog, deleteBlog }) => {
     }
   }
 
-  if (blog.user.username === loggedUser.username) {
+  if (blog.user?.username === loggedUser.username) {
     return (
       <div style = {blogStyle}>
         <div style = {hideWhenVisible}>
@@ -58,7 +58,7 @@ const Blog = ({ blog, loggedUser, likeBlog, deleteBlog }) => {
         {blog.url}<br/>
         {blog.likes} &emsp;
         <button onClick={like}>like</button> <br/>
-        {blog.user.name}
+        {blog.user?.name}
       </div>
     </div>
   )
