@@ -1,6 +1,6 @@
-const initialState = 'Default notification'
+const initialState = null
 
-const notificationChange = notification => {
+export const notificationChange = notification => {
   return {
     type: 'SET_NOTIFICATION',
     notification
