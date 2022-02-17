@@ -7,15 +7,18 @@ import loginService from './services/login'
 import NewBlogForm from './components/NewBlogForm'
 import LoginForm from './components/LoginForm'
 import Togglable from './components/Togglable'
+import { setNotification } from './reducers/notificationReducer'
+import { useDispatch } from 'react-redux'
 
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [errorMessage, setErrorMessage] = useState(null)
-  const [notificationMessage, setNotificationMessage] = useState(null)
   const [user, setUser] = useState(null)
 
   const newBlogFormRef = useRef()
+
+  const dispatch = useDispatch()
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
@@ -50,10 +53,7 @@ const App = () => {
   const handleLogout = async (event) => {
     event.preventDefault()
     console.log('logging out')
-    setNotificationMessage('logged out')
-    setTimeout(() => {
-      setNotificationMessage(null)
-    }, 5000)
+    setNotification('logged out', 5)
 
     window.localStorage.removeItem('loggedBlogappUser')
     setUser(null)
@@ -68,10 +68,7 @@ const App = () => {
           console.log(blogs, returnedBlog)
           setBlogs(blogs.concat(returnedBlog))
         })
-      setNotificationMessage(`added ${blogObject.title}`)
-      setTimeout(() => {
-        setNotificationMessage(null)
-      }, 5000)
+      setNotification(`added ${blogObject.title}`, 5)
     } catch (exception) {
       console.log(exception)
       setErrorMessage('could not add blog')
@@ -86,10 +83,7 @@ const App = () => {
       blogService
         .like(blogObject)
       blogs[blogs.indexOf(blogObject)].likes += 1
-      setNotificationMessage(`liked ${blogObject.title}`)
-      setTimeout(() => {
-        setNotificationMessage(null)
-      }, 5000)
+      setNotification(`liked ${blogObject.title}`, 5)(dispatch)
     } catch (exception) {
       console.log(exception)
       setErrorMessage('could not like blog')
@@ -105,10 +99,7 @@ const App = () => {
         .del(blogObject)
       blogs.splice(blogs.indexOf(blogObject),1)
       setBlogs(blogs)
-      setNotificationMessage(`deleted ${blogObject.title}`)
-      setTimeout(() => {
-        setNotificationMessage(null)
-      }, 5000)
+      setNotification(`deleted ${blogObject.title}`, 5)
     } catch (exception) {
       console.log(exception)
       setErrorMessage('couldnt delete blog')
@@ -134,7 +125,7 @@ const App = () => {
       <div>
         <h1>Blog app</h1>
         <Error message = {errorMessage} />
-        <Notification message = {notificationMessage} />
+        <Notification/>
         <LoginForm handleLogin = {handleLogin}/>
       </div>
     )}
@@ -143,7 +134,7 @@ const App = () => {
     <div>
       <h1>Blog app</h1>
       <Error message = {errorMessage} />
-      <Notification message = {notificationMessage} />
+      <Notification/>
       <p>
         {user.name} is logged in &emsp;
         <button id='logout-button' type = "button" onClick = {handleLogout} >logout</button>
