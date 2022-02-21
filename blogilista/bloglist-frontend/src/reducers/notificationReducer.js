@@ -2,7 +2,6 @@ const initialState = null
 let timeoutID
 
 export const setNotification = (notification, time) => {
-  console.log('setNotification', notification)
   return async dispatch => {
     if (timeoutID) {
       clearTimeout(timeoutID)

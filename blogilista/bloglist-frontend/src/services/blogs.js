@@ -4,6 +4,7 @@ let token = null
 
 const setToken = newToken => {
   token = `bearer ${newToken}`
+  return token
 }
 
 const getAll = () => {
@@ -12,6 +13,7 @@ const getAll = () => {
 }
 
 const create = async newObject => {
+  console.log(token)
   const config = {
     headers: { Authorization: token }
   }
@@ -21,9 +23,6 @@ const create = async newObject => {
 }
 
 const like = async blog => {
-  const config = {
-    headers: { Authorization: token }
-  }
   const updatedObject = {
     title: blog.title,
     author: blog.author,
@@ -32,7 +31,8 @@ const like = async blog => {
     user: blog.user.id
   }
 
-  const response = await axios.put(baseUrl + `/${blog.id}`, updatedObject, config)
+  const response = await axios.put(baseUrl + `/${blog.id}`, updatedObject)
+  console.log('response:', response.data)
   return response.data
 }
 
@@ -42,6 +42,7 @@ const del = async blog => {
   }
 
   const response = await axios.delete(baseUrl + `/${blog.id}`, config)
+  console.log('response:', response.data)
   return response.data
 }
 
