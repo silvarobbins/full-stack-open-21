@@ -25,3 +25,9 @@
   font-weight: bold;
   padding-left: 0;
 }
+
+th {
+  width: 100px;
+  text-align: left;
+  font-weight: normal;
+}

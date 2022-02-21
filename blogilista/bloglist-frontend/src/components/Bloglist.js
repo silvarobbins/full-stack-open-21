@@ -80,6 +80,7 @@ const Bloglist = () => {
   console.log('blogs:', blogs)
   return(
     <div>
+      <h2>Blogs</h2>
       {blogs.sort((a,b) => b.likes-a.likes).map(blog =>
         <Blog key={blog.id} blog={blog} loggedUser={user}/>
       )}
