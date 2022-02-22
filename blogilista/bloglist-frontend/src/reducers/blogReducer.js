@@ -41,7 +41,7 @@ export const deleteBlog = (blog) => {
 }
 
 const blogReducer = (state = [], action) => {
-  console.log('blog now: ', state)
+  console.log('blog state now: ', state)
   console.log('action', action)
   switch(action.type) {
   case 'NEW_BLOG':
@@ -59,7 +59,6 @@ const blogReducer = (state = [], action) => {
   }
   case 'DELETE': {
     const { id } = action.data
-    console.log(id)
     return state.filter((blog) => blog.id !== id)
   }
   default: return state

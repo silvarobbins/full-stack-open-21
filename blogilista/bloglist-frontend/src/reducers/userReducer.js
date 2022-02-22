@@ -21,7 +21,7 @@ export const initializeUsers = () => {
 }
 
 const userReducer = (state = [], action) => {
-  console.log('user now: ', state)
+  console.log('user state now: ', state)
   console.log('action', action)
   switch(action.type) {
   case 'NEW_USER':

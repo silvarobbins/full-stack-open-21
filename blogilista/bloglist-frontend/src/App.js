@@ -1,24 +1,22 @@
-import React, { useEffect, useRef } from 'react'
-import Bloglist from './components/Bloglist'
-import Notification from './components/Notification'
-import NewBlogForm from './components/NewBlogForm'
-import LoginForm from './components/LoginForm'
-import Togglable from './components/Togglable'
-import UsersPage from './pages/users'
-import { setNotification } from './reducers/notificationReducer'
-import { initializeBlogs, createBlog } from './reducers/blogReducer'
-import { initializeUsers } from './reducers/userReducer'
-import { logout } from './reducers/loginReducer'
+import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import blogService from './services/blogs'
 import {
   BrowserRouter as Router,
   Routes, Route, Link
 } from 'react-router-dom'
-
+import UsersPage from './pages/users'
+import SingleUserPage from './pages/singleUser'
+import BlogList from './pages/blogList'
+import SingleBlogPage from './pages/singleBlog'
+import blogService from './services/blogs'
+import { setNotification } from './reducers/notificationReducer'
+import { initializeBlogs } from './reducers/blogReducer'
+import { initializeUsers } from './reducers/userReducer'
+import { logout } from './reducers/loginReducer'
+import Notification from './components/Notification'
+import LoginForm from './components/LoginForm'
 
 const App = () => {
-  const newBlogFormRef = useRef()
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -76,12 +74,11 @@ const App = () => {
         {user.name} is logged in &emsp;
         <button id='logout-button' type = "button" onClick = {handleLogout} >logout</button>
       </p>
-      <Togglable buttonLabel = "create new blog" ref = {newBlogFormRef}>
-        <NewBlogForm createBlog = {createBlog} />
-      </Togglable>
       <Routes>
         <Route path='/users' element={<UsersPage/>}/>
-        <Route path='/' element={<Bloglist/>}/>
+        <Route path="/users/:id" element={<SingleUserPage/>} />
+        <Route path="/blogs/:id" element={<SingleBlogPage/>} />
+        <Route path='/' element={<BlogList/>}/>
       </Routes>
     </Router>
   )
