@@ -15,6 +15,12 @@ import { initializeUsers } from './reducers/userReducer'
 import { logout } from './reducers/loginReducer'
 import Notification from './components/Notification'
 import LoginForm from './components/LoginForm'
+import styled from 'styled-components'
+
+const Navigation = styled.div`
+  background: Gainsboro;
+  padding: 1em;
+`
 
 const App = () => {
   const dispatch = useDispatch()
@@ -65,15 +71,13 @@ const App = () => {
   return(
     <Router>
       <h1>Blog app</h1>
-      <div>
-        <Link to='/'>Home</Link>&emsp;
-        <Link to='/users'>Users</Link>
-      </div>
-      <Notification/>
-      <p>
+      <Navigation>
+        <Link to='/'>Blogs</Link>&emsp;
+        <Link to='/users'>Users</Link>&emsp;
         {user.name} is logged in &emsp;
         <button id='logout-button' type = "button" onClick = {handleLogout} >logout</button>
-      </p>
+      </Navigation>
+      <Notification/>
       <Routes>
         <Route path='/users' element={<UsersPage/>}/>
         <Route path="/users/:id" element={<SingleUserPage/>} />

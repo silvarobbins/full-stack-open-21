@@ -11,10 +11,10 @@ const BlogList = () => {
   const blogs = useSelector((state) => state.blogs)
   return(
     <div>
+      <h2>Blogs</h2>
       <Togglable buttonLabel = "create new blog" ref = {newBlogFormRef}>
         <NewBlogForm createBlog = {createBlog} />
       </Togglable>
-      <h2>Blogs</h2>
       {blogs.sort((a,b) => b.likes-a.likes).map(blog =>
         <Blog key={blog.id} blog={blog}/>
       )}
