@@ -58,12 +58,12 @@ const Comments = ({ blog }) => {
   return (
     <div>
       <h3>Comments</h3>
-      <NewCommentForm blog={blog}/>
       <ul>
         {comments.map(comment =>
           <li key={comment.id}>{comment.comment}</li>
         )}
       </ul>
+      <NewCommentForm blog={blog}/>
     </div>
   )
 }

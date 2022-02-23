@@ -46,7 +46,7 @@ const NewBlogForm = () => {
       <h2>Create new</h2>
       <form onSubmit={addBlog}>
         <div>
-          title: &emsp;
+          Title: &emsp;
           <input
             id = 'title'
             type = 'text'
@@ -56,7 +56,7 @@ const NewBlogForm = () => {
           />
         </div>
         <div>
-          author: &emsp;
+          Author: &emsp;
           <input
             id = 'author'
             type = 'text'
@@ -66,7 +66,7 @@ const NewBlogForm = () => {
           />
         </div>
         <div>
-          url: &emsp;
+          Url: &emsp;
           <input
             id = 'url'
             type = 'text'
