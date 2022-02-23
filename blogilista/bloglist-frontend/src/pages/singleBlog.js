@@ -4,6 +4,7 @@ import { useMatch, useNavigate } from 'react-router-dom'
 import { deleteBlog } from '../reducers/blogReducer'
 import { setNotification } from '../reducers/notificationReducer'
 import { likeBlog } from '../reducers/blogReducer'
+import Comments from '../components/Comments'
 
 const SingleBlogPage = () => {
   const blogs = useSelector((state) => state.blogs)
@@ -47,14 +48,15 @@ const SingleBlogPage = () => {
 
   return(
     <div>
-      <h1>{blog.title}, {blog.author}</h1>
+      <h2>{blog.title}, {blog.author}</h2>
       <p>
-        {blog.url}<br/>
+        <a href={blog.url}>{blog.url}</a><br/>
         {blog.likes} {blog.likes === 1 ? 'like' : 'likes'} &emsp;
         <button id='like-button' onClick={like}>like</button> <br/>
         added by {blog.user.name} <br/>
         {isUser && <button id='delete-button' onClick={del}> delete blog</button>}
       </p>
+      <Comments blog={blog}/>
     </div>
   )
 }

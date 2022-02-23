@@ -4,8 +4,9 @@ const Blog = require('../models/blog')
 const middleware = require('../utils/middleware')
 
 blogRouter.get('/', async(request, response) => {
-  const blogs = await Blog
-    .find({}).populate('user', { username: 1, name: 1 })
+  const blogs = await Blog.find({})
+    .populate('user', { username: 1, name: 1 })
+    .populate('comments', { comment: 1 })
   response.json(blogs.map(blog => blog.toJSON()))
 })
   
@@ -18,7 +19,8 @@ blogRouter.post('/', middleware.tokenExtractor, middleware.userExtractor, async(
       author: body.author,
       url: body.url,
       likes: body.likes || 0,
-      user: user
+      user: user,
+      comments: []
     })
 
     const savedBlog = await blog.save()
@@ -28,12 +30,12 @@ blogRouter.post('/', middleware.tokenExtractor, middleware.userExtractor, async(
 })
 
 blogRouter.delete('/:id', middleware.tokenExtractor, middleware.userExtractor, async (request, response) => {
-    const blog = await Blog.findById(request.params.id)
+    const blog = await Blog.Id(request.params.id)
     const user = request.user
     const userid = user._id.toString()
 
     if ( blog.user.toString() === userid ) {
-      await Blog.findByIdAndRemove(request.params.id)
+      await Blog.IdAndRemove(request.params.id)
       response.status(204).end()
     } else {
       return response.status(401).json({error: 'user not authorized to delete blog'})
