@@ -1,4 +1,5 @@
 const { ApolloServer, gql } = require('apollo-server')
+const { v4: uuid } = require('uuid');
 
 let authors = [
   {
@@ -107,8 +108,21 @@ const typeDefs = gql`
   type Query {
     bookCount: Int!
     authorCount: Int!
-    allBooks(author: String): [Book!]!
+    allBooks(author: String, genre: String): [Book!]!
     allAuthors: [Author!]!
+  }
+
+  type Mutation {
+    addBook(
+      title: String!
+      published: Int!
+      author: String!
+      genres: [String]
+    ): Book
+    editAuthor(
+      name: String!
+      setBornTo: Int!
+    ): Author
   }
 `
 
@@ -117,8 +131,14 @@ const resolvers = {
     bookCount: () => books.length,
     authorCount: () => authors.length,
     allBooks: (root, args) => {
-      if (args.author) {
+      if (args.author && args.genre) {
+        const genreFiltered = books.filter((b) => b.genres.includes(args.genre))
+        const authorFiltered = genreFiltered.filter((b) => b.author === args.author)
+        return authorFiltered
+      } else if (args.author && !args.genre) {
         return books.filter((b) => b.author === args.author)
+      } else if (args.genre && !args.author) {
+        return books.filter((b) => b.genres.includes(args.genre))
       } else {
         return books
       }
@@ -129,6 +149,30 @@ const resolvers = {
     bookCount: (root) => {
       return books.filter((b)=> b.author===root.name).length
     }
+  },
+  Mutation: {
+    addBook: (root, args) => {
+      if (!authors.map((a) => a.name).includes(args.author)) {
+        const author = {
+          name: args.author,
+          id: uuid()
+        }
+        authors = authors.concat(author)
+      }
+      const book = { ...args, id: uuid() }
+      books = books.concat(book)
+      return book
+    },
+    editAuthor: (root, args) => {
+      const author = authors.find(p => p.name === args.name)
+      if (!author) {
+        return null
+      }
+  
+      const updatedAuthor = { ...author, born: args.setBornTo }
+      authors = authors.map(a => a.name === args.name ? updatedAuthor : a)
+      return updatedAuthor
+    }   
   }
 }
 
