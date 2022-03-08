@@ -1,4 +1,5 @@
 import { gql, useQuery } from '@apollo/client'
+import { useState } from 'react'
 
 const ALL_BOOKS = gql`
 query{
@@ -11,6 +12,7 @@ query{
 `
 
 const Books = (props) => {
+
   const result = useQuery(ALL_BOOKS, {
     pollInterval: 2000
   })
