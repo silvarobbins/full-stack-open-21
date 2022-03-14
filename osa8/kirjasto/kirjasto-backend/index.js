@@ -3,6 +3,7 @@ const mongoose = require('mongoose')
 const Book = require('./models/book')
 const Author = require('./models/author')
 const { v4: uuid } = require('uuid');
+const author = require('./models/author');
 
 const MONGODB_URI = 'mongodb+srv://fullstack:fullstackopen21@cluster0.rg7ao.mongodb.net/kirjasto?retryWrites=true&w=majority'
 
@@ -148,34 +149,50 @@ const resolvers = {
     authorCount: () => Author.collection.countDocuments(),
     allBooks: async (root, args) => {
       if (args.author && args.genre) {
-        return await Book.find({ genre: args.genre }, { author: { name: args.author} })
+        const author = await Author.findOne({ name: args.author })
+
+        return await Book.find({
+          $and: [
+            { genres: args.genre },
+            { author: { $in: author.id} }
+          ]})
       } else if (args.author && !args.genre) {
-        return await Book.find({ author: { name: args.author} })
+        const author = await Author.findOne({ name: args.author })
+        return await Book.find({ author: { $in: author.id } }).populate('author')
       } else if (args.genre && !args.author) {
-        return await Book.find({ genre: args.genre })
+        return await Book.find({ genre: args.genre }).populate('author')
       } else {
-        return await Book.find({})
+        return await Book.find({}).populate('author')
       }
     },
-    allAuthors: async () => await Author.find({})
-  },
-  Author: {
-    bookCount: async (root) => {
-      return await Book.find({ author: { name: args.author} }).countDocuments()
+    allAuthors: async () => {
+      const authors = await Author.find({})
+
+      return authors.map((a) => {
+        return {
+          name: a.name,
+          born: a.born,
+          bookCount: a.bookCount,
+          id: a._id
+        }
+      })
     }
   },
   Mutation: {
     addBook: async (root, args) => {
+      const bookId = uuid()
       let author = await Author.findOne({ name: args.author })
       if (!author) {
         author = new Author({
           name: args.author,
-          id: uuid()
+          born: null,
+          id: uuid(),
+          bookCount: 1
         })
         console.log(author)
         await author.save()
       } 
-      const book = new Book({ ...args, author: author._id, id: uuid() })
+      const book = new Book({ ...args, author: author._id, id: bookId })
       await book.save()
     },
     editAuthor: async (root, args) => {
@@ -185,7 +202,8 @@ const resolvers = {
       }
   
       author.born = args.setBornTo
-      return author.save
+      await author.save
+      return author
     }   
   }
 }
