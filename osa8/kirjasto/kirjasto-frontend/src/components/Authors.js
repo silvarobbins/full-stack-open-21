@@ -31,7 +31,7 @@ const Authors = (props) => {
   const [editAuthor] = useMutation(SET_BIRTHYEAR)
 
   const result = useQuery(ALL_AUTHORS, {
-    pollInterval: 2000
+    //pollInterval: 2000
   })
 
   if (!props.show) {
