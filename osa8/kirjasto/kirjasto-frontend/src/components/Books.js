@@ -15,10 +15,9 @@ const GET_BOOKS = gql`
 `
 const Books = (props) => {
   const [filter, setFilter] = useState(null)
-  const { loading, error, data, refetch } = useQuery(GET_BOOKS, {
+  const { loading, error, data } = useQuery(GET_BOOKS, {
     variables: { genre: filter }
   });
-  console.log(data)
 
   if (loading) {
     return(

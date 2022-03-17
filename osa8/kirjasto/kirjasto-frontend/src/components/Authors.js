@@ -31,7 +31,7 @@ const Authors = (props) => {
   const [editAuthor] = useMutation(SET_BIRTHYEAR)
 
   const result = useQuery(ALL_AUTHORS, {
-    //pollInterval: 2000
+    pollInterval: 1000
   })
 
   if (!props.show) {
@@ -52,7 +52,6 @@ const Authors = (props) => {
       label: a.name
     }
   })
-  console.log(options)
 
   const submit = (event) => {
     event.preventDefault()
