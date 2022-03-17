@@ -1,12 +1,14 @@
+import React from 'react'
 import { gql, useQuery } from '@apollo/client'
-import { useState } from 'react'
 
 const ALL_BOOKS = gql`
 query{
   allBooks{
     title
     published
-    author
+    author{
+      name
+    }
   }
 }
 `
@@ -45,7 +47,7 @@ const Books = (props) => {
           {books.map((a) => (
             <tr key={a.title}>
               <td>{a.title}</td>
-              <td>{a.author}</td>
+              <td>{a.author.name}</td>
               <td>{a.published}</td>
             </tr>
           ))}

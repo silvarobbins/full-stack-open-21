@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { gql, useMutation } from '@apollo/client'
 
 const CREATE_BOOK = gql`
@@ -11,7 +11,9 @@ const CREATE_BOOK = gql`
     ) {
       title
       published
-      author
+      author{
+        name
+      }
     }
   }
 `
