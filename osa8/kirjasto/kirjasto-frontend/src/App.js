@@ -34,8 +34,6 @@ const App = () => {
     }
   })
 
-  console.log({data, error})
-
   const logout = () => {
     setToken(null)
     localStorage.clear()
