@@ -1,11 +1,13 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { useQuery } from '@apollo/client'
-import { GET_BOOKS } from '../queries'
+import { GET_CURRENT_USER, GET_BOOKS } from '../queries'
 
-const Books = (props) => {
-  const [filter, setFilter] = useState(null)
+
+const Recommended = (props) => {
+  const result = useQuery(GET_CURRENT_USER)
   const { loading, error, data } = useQuery(GET_BOOKS, {
-    variables: { genre: filter }
+    variables: { genre: result.data?.me.favoriteGenre },
+    // pollInterval: 500
   });
 
   if (loading) {
@@ -21,15 +23,13 @@ const Books = (props) => {
   }
 
   const books = data.allBooks
-  const onlyUnique = (value, index, self) => {
-    return self.indexOf(value) === index;
-  }
-  const genres = books.flatMap((b) => b.genres).filter(onlyUnique)
 
   return (
     <div>
       <h2>books</h2>
-      {filter ? <div>in genre {filter}</div>: <div>showing all</div>}
+      <div>
+        books in your favorite category
+      </div>
       <table>
         <tbody>
           <tr>
@@ -46,14 +46,8 @@ const Books = (props) => {
           ))}
         </tbody>
       </table>
-      <div>
-        {genres.map((g) => 
-          <button key={g} onClick={() => setFilter(g)}>{g}</button>
-        )}
-        <button key={'empty'} onClick={() => setFilter(null)}>all genres</button>
-      </div>
     </div>
   )
 }
 
-export default Books
+export default Recommended

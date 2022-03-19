@@ -1,28 +1,8 @@
-import { gql, useMutation, useQuery } from '@apollo/client'
-import { useState } from 'react'
+import { useMutation, useQuery } from '@apollo/client'
+import React, { useState } from 'react'
 import Select from 'react-select'
+import { ALL_AUTHORS, SET_BIRTHYEAR } from '../queries'
 
-const ALL_AUTHORS = gql`
-  query {
-    allAuthors  {
-      name
-      born
-      bookCount
-    }
-  }
-`
-
-const SET_BIRTHYEAR = gql`
-  mutation editAuthor($name: String!, $setBornTo: Int!) {
-    editAuthor(
-      name: $name
-      setBornTo: $setBornTo
-    ) {
-      name
-      born
-    }    
-    }
-`
 
 const Authors = (props) => {
   const [name, setName] = useState(null)
@@ -31,7 +11,7 @@ const Authors = (props) => {
   const [editAuthor] = useMutation(SET_BIRTHYEAR)
 
   const result = useQuery(ALL_AUTHORS, {
-    pollInterval: 2000
+    // pollInterval: 1000
   })
 
   if (!props.show) {
@@ -52,7 +32,6 @@ const Authors = (props) => {
       label: a.name
     }
   })
-  console.log(options)
 
   const submit = (event) => {
     event.preventDefault()
