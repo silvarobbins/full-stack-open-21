@@ -1,18 +1,7 @@
-import React, { useEffect, useState } from 'react'
-import { gql, useQuery } from '@apollo/client'
+import React, { useState } from 'react'
+import { useQuery } from '@apollo/client'
+import { GET_BOOKS } from '../queries'
 
-const GET_BOOKS = gql`
-  query allBooks($genre: String){
-    allBooks(genre: $genre){
-      title
-      published
-      author{
-        name
-      }
-      genres
-    }
-  }
-`
 const Books = (props) => {
   const [filter, setFilter] = useState(null)
   const { loading, error, data } = useQuery(GET_BOOKS, {

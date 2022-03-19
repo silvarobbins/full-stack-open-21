@@ -4,15 +4,37 @@ import Books from './components/Books'
 import NewBook from './components/NewBook'
 import Login from './components/Login'
 import Recommended from './components/Recommend'
+import { useApolloClient, useSubscription } from '@apollo/client'
+import { BOOK_ADDED, GET_BOOKS } from './queries'
+
+export const updateCache = (cache, query, addedBook) => {
+  cache.updateQuery(query, (data) => {
+    console.log({data})
+    return {
+      allBooks: data?.allBooks.concat(addedBook),
+    }
+  })
+}
 
 const App = () => {
   const [page, setPage] = useState('authors')
   const [token, setToken] = useState(null)
+  const client = useApolloClient()
 
   useEffect(() => {
     setToken(window.localStorage.getItem('library-user-token'))
   }, [])
   
+  const { data, error } = useSubscription(BOOK_ADDED, {
+    onSubscriptionData: ({ subscriptionData, client }) => {
+      const addedBook = subscriptionData.data.bookAdded
+      window.alert(`${addedBook.title} added`)
+      // updateCache(client.cache, { query: GET_BOOKS }, addedBook)
+      client.cache.updateQuery({ query: GET_BOOKS, variables: {genre: null}}, (data) => ({allBooks: data?.allBooks.concat(addedBook) || []}))
+    }
+  })
+
+  console.log({data, error})
 
   const logout = () => {
     setToken(null)

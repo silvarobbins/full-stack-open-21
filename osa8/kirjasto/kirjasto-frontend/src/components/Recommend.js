@@ -1,32 +1,13 @@
-import React, { useEffect, useState } from 'react'
-import { gql, useQuery } from '@apollo/client'
+import React from 'react'
+import { useQuery } from '@apollo/client'
+import { GET_CURRENT_USER, GET_BOOKS } from '../queries'
 
-const GET_BOOKS = gql`
-  query allBooks($genre: String){
-    allBooks(genre: $genre){
-      title
-      published
-      author{
-        name
-      }
-      genres
-    }
-  }
-`
-
-const GET_CURRENT_USER = gql`
-  query me {
-    me {
-        favoriteGenre
-      }
-  }
-`
 
 const Recommended = (props) => {
   const result = useQuery(GET_CURRENT_USER)
   const { loading, error, data } = useQuery(GET_BOOKS, {
     variables: { genre: result.data?.me.favoriteGenre },
-    pollInterval: 500
+    // pollInterval: 500
   });
 
   if (loading) {
