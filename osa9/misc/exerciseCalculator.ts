@@ -1,14 +1,4 @@
-interface ResultObject {
-  periodLength: number,
-  trainingDays: number,
-  success: boolean,
-  rating: number,
-  ratingDescription: string,
-  target: number,
-  average: number
-};
-
-const calculateExcercises = (exercise: number[], target: number) => {
+export const calculateExercises = (exercise: number[], target: number) => {
   const sum = exercise.reduce((a,b) => a + b, 0);
   const avg = sum/exercise.length || 0;
   let rating;
@@ -32,14 +22,5 @@ const calculateExcercises = (exercise: number[], target: number) => {
     ratingDescription: ratingDescription,
     target: target,
     average: avg
-  }
+  };
 };
-
-const targetInput: number = Number(process.argv[2]);
-let exerciseInput: Array<number> = [];
-for (let i = 3; i < process.argv.length ; i++) {
-  console.log(process.argv[i])
-  exerciseInput = [...exerciseInput, Number(process.argv[i])]
-}
-
-console.log(calculateExcercises(exerciseInput, targetInput))
